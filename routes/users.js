@@ -1,5 +1,8 @@
 const express = require('express');
-const router = express.Router;
+const router = require('express-promise-router')();
+// const router = express.Router;
+//The line above is uneccessary when using express-promise-router
+
 
 const UserControllers = require('../controllers/users');
 
