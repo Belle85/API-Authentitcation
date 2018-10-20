@@ -1,15 +1,16 @@
 const JWT = require("jsonwebtoken");
 const User = require("../models/user");
+const {JWT_SECRET} = require("../config");
 
-signToken = user => {
+signToken = User => {
     return JWT.sign(
         {
         iss: "BoatOuter",
-        sub: newUser._id,
+        sub: User._id,
         iat:new Date().getTime(),
         exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
         }, 
-        "JWT_SECRET");
+        JWT_SECRET);
 }
 
 module.exports = {
@@ -40,16 +41,16 @@ module.exports = {
         // Generate the token
         const token = signToken(newUser);
 
-        const token = JWT.sign(
-            {
-            iss: "BoatOuter",
-            sub: newUser._id,
-            iat:new Date().getTime(),
-            exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
-            }, 
-            "boatouterauthentication");
+        // const token = JWT.sign(
+        //     {
+        //     iss: "BoatOuter",
+        //     sub: newUser._id,
+        //     iat:new Date().getTime(),
+        //     exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
+        //     }, 
+        //     "boatouterauthentication");
 
-              //If yes, then respond with token.
+              //Respond with token.
              res.status(200).json({token: token})
     },
 
