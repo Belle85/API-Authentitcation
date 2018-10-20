@@ -4,15 +4,15 @@ const router = require('express-promise-router')();
 //The line above is uneccessary when using express-promise-router
 
 const {validateBody, schemas } = require('../helpers/routesHelpers')
-const UserControllers = require('../controllers/users');
+const UserController = require('../controllers/user');
 
 router.route('/signup')
-    .post(validateBody(schemas.authSchema), UserControllers.signUp);
+    .post(validateBody(schemas.authSchema), UserController.signUp);
 
 router.route('/signin')
-    .post(UserControllers.signIn);
+    .post(UserController.signIn);
 
 router.route('/secret')
-    .get(UserControllers.secret);
+    .get(UserController.secret);
 
 module.exports = router;
