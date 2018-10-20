@@ -1,39 +1,68 @@
+const JWT = require("jsonwebtoken");
 const User = require("../models/user");
 
-//This is what the code would look like without using express-promise-router
-// module.exports = {
-//     signUp: async (req, res, next) => {
-//         try {
-//             [MY CODE]
-//         } catch(error){
-//             next(error);
-//         }
-//     }
-// }
+signToken = user => {
+    return JWT.sign(
+        {
+        iss: "BoatOuter",
+        sub: newUser._id,
+        iat:new Date().getTime(),
+        exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
+        }, 
+        "JWT_SECRET");
+}
 
 module.exports = {
+
+    /* SIGNUP CONTROLLER */
     signUp: async (req, res, next) => {
-        console.log('UserController.signUp() called!');
+        // console.log('UserController.signUp() called!');
 
         const { email, password } = req.value.body;
         //The two lines below are equivalent of the line above.
         // const email = req.value.body.email;
         // const password = req.value.body.password
 
+        //Check if there is a user with the same email.
+        const foundUser = await User.findOne({email: email});
+        if (foundUser) { 
+            return res.status(403).send({error: "This email address is already being used."});
+    }
+
+
+        //If no, then create new user.
         const newUser = new User({
             email: email,
             password: password
         });
         await newUser.save();
 
-        res.json({ user:"Created"});
+        // Generate the token
+        const token = signToken(newUser);
+
+        const token = JWT.sign(
+            {
+            iss: "BoatOuter",
+            sub: newUser._id,
+            iat:new Date().getTime(),
+            exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
+            }, 
+            "boatouterauthentication");
+
+              //If yes, then respond with token.
+             res.status(200).json({token: token})
     },
 
+
+
+     /* SIGNIN CONTROLLER */
     signIn: async (req, res, next) => {
-        console.log('UserController.signIn() called!');
+        // console.log('UserController.signIn() called!');
     },
 
+
+     /* SECRET CONTROLLER */
     secret: async (req, res, next) => {
-        console.log('UserController.secret() called!');
+        // console.log('UserController.secret() called!');
     },
 }
