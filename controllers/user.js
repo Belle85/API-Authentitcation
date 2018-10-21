@@ -66,5 +66,6 @@ module.exports = {
     secret: async (req, res, next) => {
         // console.log('UserController.secret() called!');
         console.log("Passport took me here!");
+        res.json({secret: "Shhh It's secret."});
     },
 }
