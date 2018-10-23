@@ -2,11 +2,11 @@ const JWT = require("jsonwebtoken");
 const User = require("../models/user");
 const {JWT_SECRET} = require("../config");
 
-signToken = User => {
+signToken = user => {
     return JWT.sign(
         {
         iss: "BoatOuter",
-        sub: User._id,
+        sub: user._id,
         iat:new Date().getTime(),
         exp: new Date().setDate( new Date().getDate() + 1) //Current time + 1 day ahead.
         }, 
@@ -25,7 +25,7 @@ module.exports = {
         // const password = req.value.body.password
 
         //Check if there is a user with the same email.
-        const foundUser = await User.findOne({email: email});
+        const foundUser = await User.findOne({email});
         if (foundUser) { 
             return res.status(403).send({error: "This email address is already being used."});
     }
@@ -57,9 +57,13 @@ module.exports = {
 
 
      /* SIGNIN CONTROLLER */
-    signIn: async (req, res, next) => {
-        // console.log('UserController.signIn() called!');
-    },
+     signIn: async (req, res, next) => {
+         console.log(req.body);
+         console.log('signin')
+        // Generate token
+        const token = signToken(req.user);
+        res.status(200).json({ token});
+      },
 
 
      /* SECRET CONTROLLER */
